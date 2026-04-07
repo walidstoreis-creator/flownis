@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Fliwanser Shop</title>
+  <style>
+    body {
+      font-family: Arial;
+      margin: 0;
+      background: #f4f4f4;
+    }
+
+    header {
+      background: #222;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    nav {
+      background: #444;
+      padding: 10px;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      margin: 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .products {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .card {
+      background: white;
+      padding: 15px;
+      width: 200px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .btn {
+      background: #28a745;
+      color: white;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .btn:hover {
+      background: #218838;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Fliwanser Shop</h1>
+</header>
+
+<nav>
+  <a href="#">Accueil</a>
+  <a href="#">Produits</a>
+  <a href="login.html">Login</a>
+</nav>
+
+<div class="container">
+  <h2>Nos Produits</h2>
+
+  <div class="products">
+
+    <div class="card">
+      <img src="https://via.placeholder.com/200">
+      <h3>Pièce 1</h3>
+      <p>Prix: 100 DH</p>
+      <button class="btn">Acheter</button>
+    </div>
+
+    <div class="card">
+      <img src="https://via.placeholder.com/200">
+      <h3>Pièce 2</h3>
+      <p>Prix: 200 DH</p>
+      <button class="btn">Acheter</button>
+    </div>
+
+    <div class="card">
+      <img src="https://via.placeholder.com/200">
+      <h3>Pièce 3</h3>
+      <p>Prix: 300 DH</p>
+      <button class="btn">Acheter</button>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
