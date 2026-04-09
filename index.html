@@ -1,145 +1,103 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>متجر بسيط</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A-Z Store PRO</title>
 <style>
-body {
-  font-family: Arial;
-  text-align: center;
-  background: #f5f5f5;
-}
-
-h1 {
-  margin: 20px;
-}
-
-#products {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.product {
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  width: 180px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-button {
-  background: green;
-  color: white;
-  border: none;
-  padding: 8px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-button:hover {
-  background: darkgreen;
-}
-
-#cart-box {
-  margin-top: 30px;
-  background: white;
-  padding: 20px;
-  width: 300px;
-  margin-left: auto;
-  margin-right: auto;
-  border-radius: 10px;
-}
-
+body{margin:0;font-family:Arial;background:#f5f5f5}
+header{background:#111;color:#fff;padding:15px;display:flex;justify-content:space-between}
+nav a{color:#fff;margin:0 10px;text-decoration:none}
+.hero{background:url('https://picsum.photos/1200/400') center/cover;padding:80px;text-align:center;color:#fff}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;padding:20px}
+.product{background:#fff;padding:15px;border-radius:10px;text-align:center}
+.product img{width:100%;border-radius:10px}
+button{background:#111;color:#fff;border:none;padding:10px;border-radius:5px;cursor:pointer}
+.cartBox{position:fixed;right:20px;top:20px;background:red;color:#fff;padding:10px;border-radius:50%}
+.login{position:fixed;top:0;left:0;width:100%;height:100%;background:#000000aa;display:none;justify-content:center;align-items:center}
+.login form{background:#fff;padding:20px;border-radius:10px}
+input{display:block;margin:10px 0;padding:10px;width:200px}
 </style>
 </head>
-
 <body>
 
-<h1>🛒 متجر إلكتروني بسيط</h1>
+<header>
+<h2>A-Z Store PRO</h2>
+<nav>
+<a href="#">Home</a>
+<a href="#products">Products</a>
+<a href="#" onclick="openLogin()">Login</a>
+</nav>
+</header>
 
-<div id="products"></div>
+<div class="hero">
+<h1>Best Store Online</h1>
+<p>Buy anything from A to Z</p>
+</div>
 
-<div id="cart-box">
-  <h2>السلة</h2>
-  <ul id="cart"></ul>
-  <p id="total"></p>
+<div class="cartBox" id="cart">0</div>
+
+<section class="products" id="products"></section>
+
+<!-- LOGIN -->
+<div class="login" id="loginBox">
+<form onsubmit="login(event)">
+<h3>Login</h3>
+<input type="text" id="user" placeholder="Username" required>
+<input type="password" id="pass" placeholder="Password" required>
+<button>Login</button>
+</form>
 </div>
 
 <script>
-// المنتجات
-const products = [
-  { id: 1, name: "📱 هاتف", price: 200 },
-  { id: 2, name: "💻 حاسوب", price: 800 },
-  { id: 3, name: "🎧 سماعات", price: 50 },
-  { id: 4, name: "⌚ ساعة", price: 120 }
+let products=[
+{id:1,name:"Nike Shoes",price:50,img:"https://picsum.photos/300?1"},
+{id:2,name:"Watch",price:30,img:"https://picsum.photos/300?2"},
+{id:3,name:"Bag",price:20,img:"https://picsum.photos/300?3"},
+{id:4,name:"Headphones",price:40,img:"https://picsum.photos/300?4"}
 ];
 
-// استرجاع السلة
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
 
-// عرض المنتجات
-function displayProducts() {
-  const container = document.getElementById("products");
-  container.innerHTML = "";
-
-  products.forEach(p => {
-    container.innerHTML += `
-      <div class="product">
-        <h3>${p.name}</h3>
-        <p>${p.price} $</p>
-        <button onclick="addToCart(${p.id})">أضف للسلة</button>
-      </div>
-    `;
-  });
+function renderProducts(){
+let html="";
+products.forEach(p=>{
+html+=`<div class="product">
+<img src="${p.img}">
+<h3>${p.name}</h3>
+<p>$${p.price}</p>
+<button onclick="addToCart(${p.id})">Add to cart</button>
+</div>`;
+});
+document.getElementById("products").innerHTML=html;
 }
 
-// إضافة للسلة
-function addToCart(id) {
-  const product = products.find(p => p.id === id);
-  cart.push(product);
-  saveCart();
+function addToCart(id){
+cart.push(id);
+localStorage.setItem("cart",JSON.stringify(cart));
+updateCart();
 }
 
-// حذف من السلة
-function removeFromCart(index) {
-  cart.splice(index, 1);
-  saveCart();
+function updateCart(){
+document.getElementById("cart").innerText=cart.length;
 }
 
-// حفظ وتحديث
-function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
-  displayCart();
+function openLogin(){
+document.getElementById("loginBox").style.display="flex";
 }
 
-// عرض السلة
-function displayCart() {
-  const cartList = document.getElementById("cart");
-  const total = document.getElementById("total");
-
-  cartList.innerHTML = "";
-  let sum = 0;
-
-  cart.forEach((item, index) => {
-    sum += item.price;
-    cartList.innerHTML += `
-      <li>
-        ${item.name} - ${item.price} $
-        <button onclick="removeFromCart(${index})">❌</button>
-      </li>
-    `;
-  });
-
-  total.innerText = "المجموع: " + sum + " $";
+function login(e){
+e.preventDefault();
+let user=document.getElementById("user").value;
+localStorage.setItem("user",user);
+alert("Welcome "+user);
+document.getElementById("loginBox").style.display="none";
 }
 
-// تشغيل
-displayProducts();
-displayCart();
+renderProducts();
+updateCart();
 </script>
 
 </body>
 </html>
+
