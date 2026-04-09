@@ -1,103 +1,181 @@
+// ================= FULL JUMIA-LIKE PROJECT =================
+// STRUCTURE:
+// /project
+//   server.js
+//   /models
+//   /routes
+//   /public/index.html
+
+// ================= BACKEND (server.js) =================
+
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use(express.static('public'));
+
+// MongoDB connect
+mongoose.connect('mongodb://127.0.0.1:27017/store');
+
+// Product Model
+const Product = mongoose.model('Product', {
+  name: String,
+  price: Number,
+  img: String
+});
+
+// User Model
+const User = mongoose.model('User', {
+  username: String,
+  password: String,
+  role: String
+});
+
+// ROUTES
+
+// GET products
+app.get('/api/products', async (req, res) => {
+  const products = await Product.find();
+  res.json(products);
+});
+
+// ADD product (admin)
+app.post('/api/products', async (req, res) => {
+  const p = new Product(req.body);
+  await p.save();
+  res.json(p);
+});
+
+// DELETE product
+app.delete('/api/products/:id', async (req, res) => {
+  await Product.findByIdAndDelete(req.params.id);
+  res.json({ success: true });
+});
+
+// REGISTER
+app.post('/api/register', async (req, res) => {
+  const user = new User({ ...req.body, role: 'user' });
+  await user.save();
+  res.json(user);
+});
+
+// LOGIN
+app.post('/api/login', async (req, res) => {
+  const user = await User.findOne(req.body);
+  if (!user) return res.status(401).json({ error: 'Invalid' });
+  res.json(user);
+});
+
+app.listen(3000, () => console.log('Server running'));
+
+
+// ================= FRONTEND (public/index.html) =================
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A-Z Store PRO</title>
+<title>Jumia Clone</title>
 <style>
-body{margin:0;font-family:Arial;background:#f5f5f5}
-header{background:#111;color:#fff;padding:15px;display:flex;justify-content:space-between}
-nav a{color:#fff;margin:0 10px;text-decoration:none}
-.hero{background:url('https://picsum.photos/1200/400') center/cover;padding:80px;text-align:center;color:#fff}
-.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;padding:20px}
-.product{background:#fff;padding:15px;border-radius:10px;text-align:center}
-.product img{width:100%;border-radius:10px}
-button{background:#111;color:#fff;border:none;padding:10px;border-radius:5px;cursor:pointer}
-.cartBox{position:fixed;right:20px;top:20px;background:red;color:#fff;padding:10px;border-radius:50%}
-.login{position:fixed;top:0;left:0;width:100%;height:100%;background:#000000aa;display:none;justify-content:center;align-items:center}
-.login form{background:#fff;padding:20px;border-radius:10px}
-input{display:block;margin:10px 0;padding:10px;width:200px}
+body{font-family:Arial;margin:0;background:#f5f5f5}
+header{background:orange;color:#fff;padding:15px;display:flex;justify-content:space-between}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;padding:20px}
+.product{background:#fff;padding:10px;border-radius:10px;text-align:center}
+button{background:orange;color:#fff;border:none;padding:10px;cursor:pointer}
+.cart{position:fixed;right:20px;top:20px;background:#000;color:#fff;padding:10px}
+.auth{padding:20px}
 </style>
 </head>
 <body>
 
 <header>
-<h2>A-Z Store PRO</h2>
-<nav>
-<a href="#">Home</a>
-<a href="#products">Products</a>
-<a href="#" onclick="openLogin()">Login</a>
-</nav>
+<h2>Jumia Clone</h2>
+<div id="user"></div>
 </header>
 
-<div class="hero">
-<h1>Best Store Online</h1>
-<p>Buy anything from A to Z</p>
+<div class="auth">
+<input id="username" placeholder="username">
+<input id="password" placeholder="password">
+<button onclick="register()">Register</button>
+<button onclick="login()">Login</button>
 </div>
 
-<div class="cartBox" id="cart">0</div>
+<div class="cart" id="cart">0</div>
 
 <section class="products" id="products"></section>
 
-<!-- LOGIN -->
-<div class="login" id="loginBox">
-<form onsubmit="login(event)">
-<h3>Login</h3>
-<input type="text" id="user" placeholder="Username" required>
-<input type="password" id="pass" placeholder="Password" required>
-<button>Login</button>
-</form>
-</div>
-
 <script>
-let products=[
-{id:1,name:"Nike Shoes",price:50,img:"https://picsum.photos/300?1"},
-{id:2,name:"Watch",price:30,img:"https://picsum.photos/300?2"},
-{id:3,name:"Bag",price:20,img:"https://picsum.photos/300?3"},
-{id:4,name:"Headphones",price:40,img:"https://picsum.photos/300?4"}
-];
+const API = '/api';
+let cart = [];
 
-let cart=JSON.parse(localStorage.getItem("cart"))||[];
+async function loadProducts(){
+  const res = await fetch(API + '/products');
+  const data = await res.json();
 
-function renderProducts(){
-let html="";
-products.forEach(p=>{
-html+=`<div class="product">
-<img src="${p.img}">
-<h3>${p.name}</h3>
-<p>$${p.price}</p>
-<button onclick="addToCart(${p.id})">Add to cart</button>
-</div>`;
-});
-document.getElementById("products").innerHTML=html;
+  let html='';
+  data.forEach(p=>{
+    html += `
+    <div class="product">
+      <img src="${p.img}" width="100%">
+      <h3>${p.name}</h3>
+      <p>$${p.price}</p>
+      <button onclick="addToCart()">Buy</button>
+    </div>`;
+  });
+
+  document.getElementById('products').innerHTML = html;
 }
 
-function addToCart(id){
-cart.push(id);
-localStorage.setItem("cart",JSON.stringify(cart));
-updateCart();
+function addToCart(){
+  cart.push(1);
+  document.getElementById('cart').innerText = cart.length;
 }
 
-function updateCart(){
-document.getElementById("cart").innerText=cart.length;
+async function register(){
+  await fetch(API + '/register', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      username: username.value,
+      password: password.value
+    })
+  });
+  alert('Registered');
 }
 
-function openLogin(){
-document.getElementById("loginBox").style.display="flex";
+async function login(){
+  const res = await fetch(API + '/login', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      username: username.value,
+      password: password.value
+    })
+  });
+
+  if(res.status===200){
+    const user = await res.json();
+    document.getElementById('user').innerText = 'Hello ' + user.username;
+  } else {
+    alert('Login failed');
+  }
 }
 
-function login(e){
-e.preventDefault();
-let user=document.getElementById("user").value;
-localStorage.setItem("user",user);
-alert("Welcome "+user);
-document.getElementById("loginBox").style.display="none";
-}
-
-renderProducts();
-updateCart();
+loadProducts();
 </script>
 
 </body>
 </html>
+
+// ================= HOW TO RUN =================
+// 1. install MongoDB
+// 2. npm init -y
+// 3. npm install express cors mongoose
+// 4. node server.js
+// 5. open http://localhost:3000
+
+// NOW YOU HAVE JUMIA-LIKE SITE 🔥
 
