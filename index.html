@@ -1,796 +1,145 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="ar">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fliwanser Shop</title>
-  <style>
-    :root{
-      --bg:#0f172a;
-      --bg2:#111827;
-      --card:#ffffff;
-      --text:#0f172a;
-      --muted:#64748b;
-      --primary:#2563eb;
-      --primary2:#1d4ed8;
-      --accent:#22c55e;
-      --line:#e2e8f0;
-      --shadow: 0 10px 30px rgba(15,23,42,.10);
-      --radius: 18px;
-    }
-
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
-    }
-
-    body{
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f8fafc;
-      color: var(--text);
-      line-height: 1.6;
-    }
-
-    a{
-      text-decoration:none;
-      color:inherit;
-    }
-
-    .container{
-      width:min(1150px, 92%);
-      margin:auto;
-    }
-
-    /* Header */
-    .topbar{
-      background: linear-gradient(90deg, var(--bg), #1e293b);
-      color:#fff;
-      font-size:14px;
-      padding:10px 0;
-    }
-
-    .topbar .container{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-
-    .topbar span{
-      opacity:.9;
-    }
-
-    .topbar .right{
-      display:flex;
-      gap:14px;
-      flex-wrap:wrap;
-    }
-
-    .navbar{
-      background:rgba(255,255,255,.92);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top:0;
-      z-index:100;
-      border-bottom:1px solid var(--line);
-    }
-
-    .nav-inner{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:20px;
-      padding:16px 0;
-    }
-
-    .logo{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      font-weight:800;
-      font-size:1.2rem;
-    }
-
-    .logo-badge{
-      width:42px;
-      height:42px;
-      border-radius:14px;
-      background: linear-gradient(135deg, var(--primary), #7c3aed);
-      display:grid;
-      place-items:center;
-      color:#fff;
-      font-weight:900;
-      box-shadow: var(--shadow);
-    }
-
-    .nav-links{
-      display:flex;
-      gap:22px;
-      align-items:center;
-      color:#334155;
-      font-weight:600;
-      flex-wrap:wrap;
-    }
-
-    .nav-links a:hover{
-      color:var(--primary);
-    }
-
-    .nav-actions{
-      display:flex;
-      gap:12px;
-      align-items:center;
-    }
-
-    .btn{
-      border:none;
-      cursor:pointer;
-      border-radius:14px;
-      padding:12px 18px;
-      font-weight:700;
-      transition:.25s ease;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-    }
-
-    .btn-primary{
-      background:var(--primary);
-      color:#fff;
-      box-shadow: 0 8px 20px rgba(37,99,235,.25);
-    }
-
-    .btn-primary:hover{
-      background:var(--primary2);
-      transform: translateY(-1px);
-    }
-
-    .btn-light{
-      background:#e2e8f0;
-      color:#0f172a;
-    }
-
-    .btn-light:hover{
-      background:#cbd5e1;
-    }
-
-    /* Hero */
-    .hero{
-      background:
-        radial-gradient(circle at top left, rgba(37,99,235,.22), transparent 30%),
-        radial-gradient(circle at top right, rgba(34,197,94,.16), transparent 28%),
-        linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-      padding:70px 0 40px;
-    }
-
-    .hero-grid{
-      display:grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap:30px;
-      align-items:center;
-    }
-
-    .hero h1{
-      font-size: clamp(2.1rem, 4vw, 4rem);
-      line-height:1.1;
-      margin-bottom:18px;
-      letter-spacing:-.03em;
-    }
-
-    .hero p{
-      color:var(--muted);
-      font-size:1.05rem;
-      max-width: 620px;
-      margin-bottom:26px;
-    }
-
-    .hero-actions{
-      display:flex;
-      gap:14px;
-      flex-wrap:wrap;
-      margin-bottom:26px;
-    }
-
-    .hero-tags{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .tag{
-      padding:8px 12px;
-      border:1px solid var(--line);
-      border-radius:999px;
-      background:#fff;
-      color:#334155;
-      font-size:14px;
-      font-weight:600;
-    }
-
-    .hero-card{
-      background: linear-gradient(160deg, #0f172a, #1e293b);
-      color:#fff;
-      border-radius: 26px;
-      padding:24px;
-      box-shadow: var(--shadow);
-      position:relative;
-      overflow:hidden;
-      min-height: 380px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-    }
-
-    .hero-card::before{
-      content:"";
-      position:absolute;
-      inset:-60px -60px auto auto;
-      width:180px;
-      height:180px;
-      background:rgba(37,99,235,.25);
-      border-radius:50%;
-      filter: blur(10px);
-    }
-
-    .hero-card .mini{
-      display:flex;
-      justify-content:space-between;
-      gap:14px;
-      flex-wrap:wrap;
-      position:relative;
-      z-index:1;
-    }
-
-    .mini-box{
-      background: rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:18px;
-      padding:14px;
-      min-width: 120px;
-    }
-
-    .mini-box strong{
-      display:block;
-      font-size:1.3rem;
-      margin-bottom:4px;
-    }
-
-    .mini-box span{
-      font-size:13px;
-      opacity:.85;
-    }
-
-    .hero-image{
-      margin-top:18px;
-      background: rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:22px;
-      padding:18px;
-      position:relative;
-      z-index:1;
-    }
-
-    .hero-image img{
-      width:100%;
-      height:220px;
-      object-fit:cover;
-      border-radius:18px;
-      display:block;
-    }
-
-    /* Sections */
-    section{
-      padding:48px 0;
-    }
-
-    .section-title{
-      display:flex;
-      justify-content:space-between;
-      gap:16px;
-      align-items:end;
-      margin-bottom:22px;
-      flex-wrap:wrap;
-    }
-
-    .section-title h2{
-      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
-      letter-spacing:-.02em;
-    }
-
-    .section-title p{
-      color:var(--muted);
-      max-width: 560px;
-    }
-
-    /* Stats */
-    .stats{
-      display:grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap:16px;
-    }
-
-    .stat{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      padding:18px;
-      box-shadow: var(--shadow);
-      text-align:center;
-    }
-
-    .stat strong{
-      display:block;
-      font-size:1.7rem;
-      margin-bottom:4px;
-    }
-
-    .stat span{
-      color:var(--muted);
-      font-size:14px;
-    }
-
-    /* Categories */
-    .categories{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:18px;
-    }
-
-    .category{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      padding:22px;
-      box-shadow: var(--shadow);
-      transition:.25s ease;
-    }
-
-    .category:hover{
-      transform: translateY(-3px);
-    }
-
-    .category h3{
-      margin-bottom:8px;
-    }
-
-    .category p{
-      color:var(--muted);
-      font-size:14px;
-    }
-
-    /* Products */
-    .products{
-      display:grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap:18px;
-    }
-
-    .product-card{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      overflow:hidden;
-      box-shadow: var(--shadow);
-      transition:.25s ease;
-      display:flex;
-      flex-direction:column;
-    }
-
-    .product-card:hover{
-      transform: translateY(-4px);
-    }
-
-    .product-card img{
-      width:100%;
-      height:190px;
-      object-fit:cover;
-      display:block;
-    }
-
-    .product-body{
-      padding:16px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      flex:1;
-    }
-
-    .product-body h3{
-      font-size:1.05rem;
-    }
-
-    .product-body p{
-      color:var(--muted);
-      font-size:14px;
-      flex:1;
-    }
-
-    .price-row{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin-top:4px;
-    }
-
-    .price{
-      font-weight:800;
-      color:var(--primary);
-      font-size:1.1rem;
-    }
-
-    .badge{
-      background:#dcfce7;
-      color:#166534;
-      border-radius:999px;
-      padding:6px 10px;
-      font-size:12px;
-      font-weight:700;
-    }
-
-    .product-actions{
-      display:flex;
-      gap:10px;
-    }
-
-    .product-actions .btn{
-      flex:1;
-      padding:11px 14px;
-      border-radius:12px;
-    }
-
-    .btn-outline{
-      background:#fff;
-      border:1px solid var(--line);
-      color:#0f172a;
-    }
-
-    .btn-outline:hover{
-      background:#f8fafc;
-    }
-
-    /* CTA */
-    .cta{
-      background: linear-gradient(135deg, var(--bg), #1e293b);
-      color:#fff;
-      border-radius: 28px;
-      padding:30px;
-      box-shadow: var(--shadow);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:20px;
-      flex-wrap:wrap;
-    }
-
-    .cta p{
-      color: rgba(255,255,255,.8);
-      margin-top:8px;
-    }
-
-    /* Footer */
-    footer{
-      padding:34px 0;
-      color:#475569;
-      border-top:1px solid var(--line);
-      margin-top:20px;
-      background:#fff;
-    }
-
-    .footer-grid{
-      display:grid;
-      grid-template-columns: 1.3fr 1fr 1fr;
-      gap:20px;
-    }
-
-    .footer-grid h4{
-      margin-bottom:12px;
-      color:#0f172a;
-    }
-
-    .footer-grid a{
-      display:block;
-      margin-bottom:8px;
-      color:#475569;
-    }
-
-    .footer-grid a:hover{
-      color:var(--primary);
-    }
-
-    .copyright{
-      margin-top:20px;
-      padding-top:16px;
-      border-top:1px solid var(--line);
-      font-size:14px;
-      text-align:center;
-    }
-
-    /* Responsive */
-    @media (max-width: 1024px){
-      .hero-grid,
-      .stats,
-      .categories,
-      .products,
-      .footer-grid{
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    @media (max-width: 768px){
-      .nav-inner{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-
-      .nav-links{
-        gap:14px;
-      }
-
-      .hero-grid,
-      .stats,
-      .categories,
-      .products,
-      .footer-grid{
-        grid-template-columns: 1fr;
-      }
-
-      .hero{
-        padding-top:40px;
-      }
-
-      .hero-card{
-        min-height:auto;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<title>متجر بسيط</title>
+
+<style>
+body {
+  font-family: Arial;
+  text-align: center;
+  background: #f5f5f5;
+}
+
+h1 {
+  margin: 20px;
+}
+
+#products {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.product {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  width: 180px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+button {
+  background: green;
+  color: white;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background: darkgreen;
+}
+
+#cart-box {
+  margin-top: 30px;
+  background: white;
+  padding: 20px;
+  width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
+}
+
+</style>
 </head>
+
 <body>
 
-  <div class="topbar">
-    <div class="container">
-      <span>Livraison rapide • Paiement sécurisé • Support 7j/7</span>
-      <div class="right">
-        <span>📞 +212 6 00 00 00 00</span>
-        <span>✉️ contact@fliwanser.com</span>
-      </div>
-    </div>
-  </div>
+<h1>🛒 متجر إلكتروني بسيط</h1>
 
-  <div class="navbar">
-    <div class="container nav-inner">
-      <a href="#" class="logo">
-        <div class="logo-badge">F</div>
-        <span>Fliwanser Shop</span>
-      </a>
+<div id="products"></div>
 
-      <div class="nav-links">
-        <a href="#">Accueil</a>
-        <a href="#categories">Catégories</a>
-        <a href="#produits">Produits</a>
-        <a href="#contact">Contact</a>
-      </div>
-
-      <div class="nav-actions">
-        <a href="login.html" class="btn btn-light">Login</a>
-        <a href="#" class="btn btn-primary">Commander</a>
-      </div>
-    </div>
-  </div>
-
-  <section class="hero">
-    <div class="container hero-grid">
-      <div>
-        <h1>Votre boutique moderne pour les pièces et accessoires</h1>
-        <p>
-          Découvrez une expérience d’achat claire, rapide et professionnelle.
-          Produits sélectionnés, prix compétitifs et service fiable pour vos besoins.
-        </p>
-
-        <div class="hero-actions">
-          <a href="#produits" class="btn btn-primary">Voir les produits</a>
-          <a href="#categories" class="btn btn-light">Explorer les catégories</a>
-        </div>
-
-        <div class="hero-tags">
-          <div class="tag">✔ Produits vérifiés</div>
-          <div class="tag">✔ Assistance rapide</div>
-          <div class="tag">✔ Interface responsive</div>
-        </div>
-      </div>
-
-      <div class="hero-card">
-        <div class="mini">
-          <div class="mini-box">
-            <strong>+120</strong>
-            <span>Produits</span>
-          </div>
-          <div class="mini-box">
-            <strong>24h</strong>
-            <span>Réponse</span>
-          </div>
-          <div class="mini-box">
-            <strong>4.9/5</strong>
-            <span>Satisfaction</span>
-          </div>
-        </div>
-
-        <div class="hero-image">
-          <img src="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80" alt="Boutique">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="container stats">
-      <div class="stat">
-        <strong>120+</strong>
-        <span>Produits disponibles</span>
-      </div>
-      <div class="stat">
-        <strong>15k</strong>
-        <span>Visiteurs mensuels</span>
-      </div>
-      <div class="stat">
-        <strong>98%</strong>
-        <span>Clients satisfaits</span>
-      </div>
-      <div class="stat">
-        <strong>7/7</strong>
-        <span>Support client</span>
-      </div>
-    </div>
-  </section>
-
-  <section id="categories">
-    <div class="container">
-      <div class="section-title">
-        <div>
-          <h2>Catégories principales</h2>
-          <p>Organisez vos produits pour que les clients trouvent rapidement ce qu’ils cherchent.</p>
-        </div>
-      </div>
-
-      <div class="categories">
-        <div class="category">
-          <h3>Pièces Auto</h3>
-          <p>Filtres, capteurs, câbles, accessoires et composants pour véhicules.</p>
-        </div>
-        <div class="category">
-          <h3>Électronique</h3>
-          <p>Cartes, modules, composants, alimentation et accessoires techniques.</p>
-        </div>
-        <div class="category">
-          <h3>Accessoires</h3>
-          <p>Produits complémentaires pour améliorer l’usage et la présentation.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="produits">
-    <div class="container">
-      <div class="section-title">
-        <div>
-          <h2>Produits phares</h2>
-          <p>Exemple de mise en page professionnelle pour présenter vos articles.</p>
-        </div>
-      </div>
-
-      <div class="products">
-        <div class="product-card">
-          <img src="https://images.unsplash.com/photo-1515923152115-758a1d89f3b2?auto=format&fit=crop&w=1200&q=80" alt="Produit 1">
-          <div class="product-body">
-            <h3>Pièce Premium A1</h3>
-            <p>Pièce de qualité avec description courte et claire pour le client.</p>
-            <div class="price-row">
-              <span class="price">100 DH</span>
-              <span class="badge">Nouveau</span>
-            </div>
-            <div class="product-actions">
-              <button class="btn btn-primary">Acheter</button>
-              <button class="btn btn-outline">Détails</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&w=1200&q=80" alt="Produit 2">
-          <div class="product-body">
-            <h3>Accessoire Pro B2</h3>
-            <p>Design moderne, bonne présentation et très simple à mettre à jour.</p>
-            <div class="price-row">
-              <span class="price">200 DH</span>
-              <span class="badge">Top vente</span>
-            </div>
-            <div class="product-actions">
-              <button class="btn btn-primary">Acheter</button>
-              <button class="btn btn-outline">Détails</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80" alt="Produit 3">
-          <div class="product-body">
-            <h3>Module Smart C3</h3>
-            <p>Une carte ou module compatible avec une bonne visibilité sur le site.</p>
-            <div class="price-row">
-              <span class="price">300 DH</span>
-              <span class="badge">Promo</span>
-            </div>
-            <div class="product-actions">
-              <button class="btn btn-primary">Acheter</button>
-              <button class="btn btn-outline">Détails</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <img src="https://images.unsplash.com/photo-1555617981-dac3880eac6c?auto=format&fit=crop&w=1200&q=80" alt="Produit 4">
-          <div class="product-body">
-            <h3>Pack Essential D4</h3>
-            <p>Parfait pour une offre groupée avec présentation propre et moderne.</p>
-            <div class="price-row">
-              <span class="price">400 DH</span>
-              <span class="badge">Best deal</span>
-            </div>
-            <div class="product-actions">
-              <button class="btn btn-primary">Acheter</button>
-              <button class="btn btn-outline">Détails</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="container">
-      <div class="cta">
-        <div>
-          <h2>Prêt à lancer votre boutique ?</h2>
-          <p>Ajoutez vos produits, reliez votre page de login et commencez à vendre.</p>
-        </div>
-        <a href="login.html" class="btn btn-primary">Créer un compte</a>
-      </div>
-    </div>
-  </section>
-
-  <footer id="contact">
-    <div class="container">
-      <div class="footer-grid">
-        <div>
-          <h4>Fliwanser Shop</h4>
-          <p>Une boutique simple, rapide et professionnelle pour présenter vos produits.</p>
-        </div>
-        <div>
-          <h4>Liens rapides</h4>
-          <a href="#">Accueil</a>
-          <a href="#categories">Catégories</a>
-          <a href="#produits">Produits</a>
-        </div>
-        <div>
-          <h4>Contact</h4>
-          <a href="mailto:contact@fliwanser.com">contact@fliwanser.com</a>
-          <a href="tel:+212600000000">+212 6 00 00 00 00</a>
-        </div>
-      </div>
-
-      <div class="copyright">
-        © 2026 Fliwanser Shop. Tous droits réservés.
-      </div>
-    </div>
-  </footer>
-
-</body>
-</html>
-  </div>
+<div id="cart-box">
+  <h2>السلة</h2>
+  <ul id="cart"></ul>
+  <p id="total"></p>
 </div>
+
+<script>
+// المنتجات
+const products = [
+  { id: 1, name: "📱 هاتف", price: 200 },
+  { id: 2, name: "💻 حاسوب", price: 800 },
+  { id: 3, name: "🎧 سماعات", price: 50 },
+  { id: 4, name: "⌚ ساعة", price: 120 }
+];
+
+// استرجاع السلة
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+// عرض المنتجات
+function displayProducts() {
+  const container = document.getElementById("products");
+  container.innerHTML = "";
+
+  products.forEach(p => {
+    container.innerHTML += `
+      <div class="product">
+        <h3>${p.name}</h3>
+        <p>${p.price} $</p>
+        <button onclick="addToCart(${p.id})">أضف للسلة</button>
+      </div>
+    `;
+  });
+}
+
+// إضافة للسلة
+function addToCart(id) {
+  const product = products.find(p => p.id === id);
+  cart.push(product);
+  saveCart();
+}
+
+// حذف من السلة
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  saveCart();
+}
+
+// حفظ وتحديث
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+  displayCart();
+}
+
+// عرض السلة
+function displayCart() {
+  const cartList = document.getElementById("cart");
+  const total = document.getElementById("total");
+
+  cartList.innerHTML = "";
+  let sum = 0;
+
+  cart.forEach((item, index) => {
+    sum += item.price;
+    cartList.innerHTML += `
+      <li>
+        ${item.name} - ${item.price} $
+        <button onclick="removeFromCart(${index})">❌</button>
+      </li>
+    `;
+  });
+
+  total.innerText = "المجموع: " + sum + " $";
+}
+
+// تشغيل
+displayProducts();
+displayCart();
+</script>
 
 </body>
 </html>
